@@ -1,5 +1,6 @@
 const ON_MESSAGE = Symbol('onMessage')
 const {Weather} = require('../weather/index')
+const {TianApi} = require('../tianapi/index')
 
 class MessageClass {
     constructor(bot) {
@@ -19,13 +20,16 @@ class MessageClass {
         if (msg.self()) {
             return;
         }
-        let WeatherExample = new Weather(this.bot,msg)
+        let WeatherExample = new Weather(this.bot, msg)
+        let TianApiExample = new TianApi(this.bot, msg)
         if (room && isText) {
-            WeatherExample.GroupMessage(contact,room,content,alias,msg)
+            WeatherExample.GroupMessage(contact, room, content, alias, msg)
+            TianApiExample.GroupMessage(contact, room, content, alias, msg)
             const topic = await room.topic()
             console.log(`群名: ${topic} 发消息人: ${await contact.name()} 内容: ${content}`);
         } else if (isText) {
-            WeatherExample.FriendsNews(contact,room,content,alias,msg)
+            WeatherExample.FriendsNews(contact, room, content, alias, msg)
+            TianApiExample.FriendsNews(contact, room, content, alias, msg)
             console.log(`发消息人: ${alias} 消息内容: ${content}`);
         }
     }

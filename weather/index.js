@@ -34,8 +34,8 @@ class Weather {
         if (content.startsWith('@机器人明明')) {             // 判断 群里是否有人在 @ 我
             if (content.includes('天气')) {        // 内容是否包天气
                 if (content.includes('加')) {
-                    let boxText = content.substr(7,content.length)
-                    let newBoxText =  boxText.split('加')
+                    let boxText = content.substr(7, content.length)
+                    let newBoxText = boxText.split('加')
                     let weatherText = await weatherApi(newBoxText)
                     roomSay.say(weatherText.textWeather1)
                     roomSay.say(weatherText.textWeather2)
@@ -44,8 +44,8 @@ class Weather {
                 }
                 roomSay.say(`${nameText}，请问要查询哪里的天气的呢？<br>格式：天气加省份加城市<br>例如:@机器人明明天气加河北加迁安<br>来自机器人明明...`)
                 return
-            }else {
-                roomSay.say(`我现在只会查询天气！<br>格式：天气加省份加城市<br>例如:@机器人明明天气加河北加迁安<br>...来自机器人明明...`)
+            } else {
+                // roomSay.say(`我现在只会查询天气！<br>格式：天气加省份加城市<br>例如:@机器人明明天气加河北加迁安<br>...来自机器人明明...`)
                 return
             }
 

@@ -1,5 +1,3 @@
-
-
 const superagent = require('superagent')
 
 /**
@@ -14,40 +12,51 @@ const superagent = require('superagent')
  * @returns {Promise}
  */
 function req({url, method, params, data, cookies, spider = false, platform = 'tx'}) {
-  return new Promise(function (resolve, reject) {
-    superagent(method, url)
-      .query(params)
-      .send(data)
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .end(function (err, response) {
-        if (err) {
-          console.log('请求出错', err)
-          reject(err)
-        }
-        if (spider) { // 如果是爬取内容，直接返回页面html
-          resolve(response.text)
-        } else { // 如果是非爬虫，返回格式化后的内容
-          const res = JSON.parse(response.text);
-          console.log(res);
-          return
-          if (res.code !== 200 && platform === 'tx' || res.code !== 100000 && platform === 'tl') {
-            console.error('接口请求失败', res.msg || res.text)
-          }
-          resolve(res)
-        }
-      })
-  })
+    return new Promise(function (resolve, reject) {
+        superagent(method, url)
+            .query(params)
+            .send(data)
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .end(function (err, response) {
+                if (err) {
+                    console.log('请求出错', err)
+                    reject(err)
+                }
+                if (spider) { // 如果是爬取内容，直接返回页面html
+                    resolve(response.text)
+                } else { // 如果是非爬虫，返回格式化后的内容
+                    const res = JSON.parse(response.text);
+                    console.log(res);
+                    return
+                    if (res.code !== 200 && platform === 'tx' || res.code !== 100000 && platform === 'tl') {
+                        console.error('接口请求失败', res.msg || res.text)
+                    }
+                    resolve(res)
+                }
+            })
+    })
 }
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-
-module.exports = {
-  req,
-  delay
+/**
+ * 第三方 避免和 自己 写的 api 冲突
+ * @param text
+ * @returns {boolean}
+ */
+function excludeType(text) {
+    if (text.includes('天气')) {
+        return true
+    } else {
+        return false
+    }
 }
 
-
+module.exports = {
+    req,
+    delay,
+    excludeType
+}
 
 
 // 监听对话
